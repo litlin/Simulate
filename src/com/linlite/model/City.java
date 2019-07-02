@@ -5,12 +5,21 @@ import java.util.Hashtable;
 import java.util.List;
 
 public class City {
+	private Integer id;
 	private byte belongTo = 0;
 	private String name;
 	private Hashtable<Double, Double> location = new Hashtable<>();
 	private Integer gold = 0;
 	private Integer defence = 0;
 	private List<Army> troops = new ArrayList<>();
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public Integer getId() {
+		return id;
+	}
 
 	public void setBelongTo(byte belongTo) {
 		this.belongTo = belongTo;
