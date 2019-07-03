@@ -8,7 +8,7 @@ public class City {
 	private Integer id;
 	private byte belongTo = 0;
 	private String name;
-	private Hashtable<Double, Double> location = new Hashtable<>();
+	private Hashtable<String, String> location = new Hashtable<>();
 	private Integer gold = 0;
 	private Integer defence = 0;
 	private List<Army> troops = new ArrayList<>();
@@ -37,11 +37,11 @@ public class City {
 		return name;
 	}
 
-	public void setLocation(Hashtable<Double, Double> location) {
+	public void setLocation(Hashtable<String, String> location) {
 		this.location = location;
 	}
 
-	public Hashtable<Double, Double> getLocation() {
+	public Hashtable<String, String> getLocation() {
 		return location;
 	}
 

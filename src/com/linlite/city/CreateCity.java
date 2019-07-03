@@ -1,6 +1,7 @@
 package com.linlite.city;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
@@ -32,11 +33,9 @@ public class CreateCity implements Runnable {
 			temp.setName(String.valueOf(RandomHan.getRandomHan()));
 			temp.setDefence(new Random().nextInt(5000) + 1000);
 			temp.setGold(new Random().nextInt(10000) + 500);
-			Hashtable<Double, Double> location = new Hashtable<>();
-			location.put(
-					new BigDecimal(new Random().nextDouble() * 600).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue(),
-					new BigDecimal(new Random().nextDouble() * 1000).setScale(2, BigDecimal.ROUND_HALF_UP)
-							.doubleValue());
+			Hashtable<String, String> location = new Hashtable<>();
+			location.put(new BigDecimal(new Random().nextDouble() * 600).setScale(2, RoundingMode.HALF_UP).toString(),
+					new BigDecimal(new Random().nextDouble() * 1000).setScale(2, RoundingMode.HALF_EVEN).toString());
 			temp.setLocation(location);
 			List<Army> troops = new ArrayList<>();
 			i = new Random().nextInt(3) + 1;
