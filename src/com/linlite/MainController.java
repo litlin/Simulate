@@ -10,9 +10,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
+import java.util.concurrent.Callable;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+
 import org.junit.Test;
 import com.linlite.city.CreateCity;
 import com.linlite.city.InitializationCity;
@@ -20,7 +24,7 @@ import com.linlite.model.City;
 
 public class MainController {
 
-	@Test
+	// @Test
 	public void mainTest() throws InterruptedException {
 
 		Integer poolSize = 10;
@@ -44,11 +48,13 @@ public class MainController {
 			beginLatch = new CountDownLatch(1);
 			endLatch = new CountDownLatch(poolSize);
 			for (int i = 0; i < poolSize; i++) {
-				InitializationCity initCity = new InitializationCity(Coutries, beginLatch, endLatch, cities, mapSize);
-				executor.execute(initCity);
+				// InitializationCity initCity =new InitializationCity(Coutries, beginLatch,
+				// endLatch, cities, mapSize) ;
+				executor.execute(new InitializationCity(Coutries, beginLatch, endLatch, cities, mapSize));
+				// executor.submit(initCity);
 			}
-			beginLatch.countDown();
-			endLatch.await();
+			beginLatch.countDown();// 开始latch计数归零，所有线程开始工作
+			endLatch.await();// 等待全部子线程执行完毕
 		} while (cities.size() != poolSize);
 
 		for (int i = 0; i < cities.size(); i++) {
@@ -90,7 +96,7 @@ public class MainController {
 		}
 	}
 
-//	@Test
+	// @Test
 	public void testAccuracy() {
 		BigDecimal decimal = new BigDecimal(new Random().nextDouble() * 1000);
 		decimal = decimal.setScale(2, RoundingMode.HALF_UP);

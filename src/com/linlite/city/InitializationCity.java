@@ -3,7 +3,6 @@ package com.linlite.city;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.List;
@@ -36,7 +35,7 @@ public class InitializationCity implements Runnable {
 	@Override
 	public void run() {
 		try {
-
+			beginLatch.await();// 等待每个线程初始化后，由主线程将该计数置为0，所有线程同步开始工作
 			City temp = new City();
 			Integer i = new Random().nextInt(numberOf);
 			temp.setBelongTo(i.byteValue());
@@ -88,7 +87,7 @@ public class InitializationCity implements Runnable {
 				temp.setId(id);
 				cities.put(id, temp);
 			}
-			beginLatch.await();
+
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		} finally {
