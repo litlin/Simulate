@@ -10,13 +10,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
-import java.util.concurrent.Callable;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-
 import org.junit.Test;
 import com.linlite.city.CreateCity;
 import com.linlite.city.InitializationCity;
@@ -24,7 +20,7 @@ import com.linlite.model.City;
 
 public class MainController {
 
-	// @Test
+	 @Test
 	public void mainTest() throws InterruptedException {
 
 		Integer poolSize = 10;

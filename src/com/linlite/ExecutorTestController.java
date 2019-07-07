@@ -5,17 +5,68 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
+import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import org.junit.Test;
 
 public class ExecutorTestController {
-//	@Test
+	@Test
+	public void scheduledTest() throws InterruptedException, ExecutionException {
+
+		ScheduledExecutorService scheduledThreadPool = Executors.newScheduledThreadPool(5);
+		scheduledThreadPool.schedule(new Runnable() {
+
+			@Override
+			public void run() {
+				System.out.println("delay 3‰ seconds");
+			}
+		}, 3, TimeUnit.MILLISECONDS);
+		scheduledThreadPool.awaitTermination(3, TimeUnit.MILLISECONDS);
+		scheduledThreadPool.scheduleAtFixedRate(new Runnable() {
+
+			@Override
+			public void run() {
+				System.out.println("delay 0.1 seconds, and excute every 1 seconds");
+			}
+		}, 100, 1000, TimeUnit.MILLISECONDS);
+
+		scheduledThreadPool.awaitTermination(3, TimeUnit.SECONDS);
+		System.out.println(scheduledThreadPool.isTerminated());
+		ScheduledFuture<Long> fl = scheduledThreadPool.schedule(new Callable<Long>() {
+			@Override
+			public Long call() throws Exception {
+				return System.currentTimeMillis();
+			}
+		}, 0, TimeUnit.MINUTES);
+		System.out.println(fl.get());
+		scheduledThreadPool.scheduleWithFixedDelay(new Runnable() {
+			@Override
+			public void run() {
+				System.out.println(System.currentTimeMillis());
+			}
+		}, 0, 500, TimeUnit.MILLISECONDS);
+		scheduledThreadPool.awaitTermination(3, TimeUnit.SECONDS);
+		scheduledThreadPool.shutdown();
+		System.out.println("执行完毕");
+	}
+
+	public void createExecutorOnRightWay() {
+		ExecutorService executor = new ThreadPoolExecutor(10, 10, 30L, TimeUnit.SECONDS,
+				new ArrayBlockingQueue<>(10, true));
+		executor.shutdown();
+	}
+
+	// @Test
 	public <T> void submitWithException() {
 		ExecutorService executorService = Executors.newCachedThreadPool();
 		List<Future<T>> resultList = new ArrayList<Future<T>>();
@@ -25,6 +76,7 @@ public class ExecutorTestController {
 			// 使用ExecutorService执行Callable类型的任务，并将结果保存在future变量中
 			final int seq = i;
 			Future<T> future = executorService.submit(new Callable<T>() {
+				@SuppressWarnings("unchecked")
 				@Override
 				public T call() throws Exception {
 					System.out.println(seq + "\t线程启动");
@@ -196,7 +248,7 @@ public class ExecutorTestController {
 	 * @throws InterruptedException
 	 * @throws ExecutionException
 	 */
-	@Test
+	// @Test
 	public void invokeAnyTest() throws InterruptedException, ExecutionException {
 		ExecutorService executorService = Executors.newSingleThreadExecutor();
 		Set<Callable<String>> callables = new HashSet<Callable<String>>();
@@ -231,7 +283,7 @@ public class ExecutorTestController {
 	 * @throws InterruptedException
 	 * @throws ExecutionException
 	 */
-//	@Test
+	// @Test
 	public void invokeAllTest() throws InterruptedException, ExecutionException {
 		ExecutorService executorService = Executors.newSingleThreadExecutor();
 		Set<Callable<String>> callables = new HashSet<Callable<String>>();
